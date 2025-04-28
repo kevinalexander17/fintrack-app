@@ -1,0 +1,62 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Función para verificar si el usuario está autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Función para verificar si el documento le pertenece al usuario actual
+    function isOwner() {
+      return request.auth.uid == resource.data.userId;
+    }
+    
+    // Función para verificar si los datos a escribir pertenecen al usuario actual
+    function willBeOwner() {
+      return request.auth.uid == request.resource.data.userId;
+    }
+    
+    // Reglas para la colección de cuentas
+    match /accounts/{accountId} {
+      // Permitir leer solo al propietario de la cuenta
+      allow read: if isAuthenticated() && isOwner();
+      
+      // Permitir crear solo si el usuario es dueño de los datos
+      allow create: if isAuthenticated() && willBeOwner();
+      
+      // Permitir actualizar solo al propietario
+      allow update: if isAuthenticated() && isOwner() && willBeOwner();
+      
+      // Permitir eliminar solo al propietario
+      allow delete: if isAuthenticated() && isOwner();
+      
+      // Reglas para transacciones dentro de una cuenta
+      match /transactions/{transactionId} {
+        allow read: if isAuthenticated() && isOwner();
+        allow create: if isAuthenticated() && willBeOwner();
+        allow update: if isAuthenticated() && isOwner() && willBeOwner();
+        allow delete: if isAuthenticated() && isOwner();
+      }
+    }
+    
+    // Reglas para la colección de usuarios
+    match /users/{userId} {
+      // Permitir leer/escribir solo al propio usuario
+      allow read, update, delete: if isAuthenticated() && request.auth.uid == userId;
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      
+      // Reglas para presupuestos del usuario
+      match /budgets/{budgetId} {
+        allow read: if isAuthenticated() && request.auth.uid == userId;
+        allow create, update, delete: if isAuthenticated() && request.auth.uid == userId;
+      }
+      
+      // Reglas para categorías del usuario
+      match /categories/{categoryId} {
+        allow read: if isAuthenticated() && request.auth.uid == userId;
+        allow create, update, delete: if isAuthenticated() && request.auth.uid == userId;
+      }
+    }
+  }
+} 
