@@ -9,101 +9,111 @@ class AccountsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Resumen de cuentas
-            _buildAccountSummary(context),
-            const SizedBox(height: 24),
-            
-            // Sección de cuentas
-            const Text(
-              'Mis Cuentas',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+      appBar: AppBar(
+        title: const Text('Cuentas'),
+        elevation: 0,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Resumen de cuentas
+              _buildAccountSummary(context),
+              const SizedBox(height: 24),
+              
+              // Sección de cuentas
+              const Text(
+                'Mis Cuentas',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            
-            // Lista de cuentas (ejemplo con datos mock)
-            _buildAccountItem(
-              context,
-              'Efectivo',
-              1250.50,
-              'S/.',
-              AccountType.cash,
-              Colors.green,
-              Icons.account_balance_wallet,
-            ),
-            const SizedBox(height: 12),
-            _buildAccountItem(
-              context,
-              'Cuenta BCP',
-              3780.25,
-              'S/.',
-              AccountType.bankAccount,
-              Colors.red,
-              Icons.account_balance,
-              institutionName: 'Banco de Crédito del Perú',
-            ),
-            const SizedBox(height: 12),
-            _buildAccountItem(
-              context,
-              'Ahorros BBVA',
-              2500.00,
-              'S/.',
-              AccountType.savingsAccount,
-              Colors.blue,
-              Icons.savings,
-              institutionName: 'BBVA',
-            ),
-            const SizedBox(height: 12),
-            _buildAccountItem(
-              context,
-              'Tarjeta Visa',
-              -1200.80,
-              'S/.',
-              AccountType.creditCard,
-              Colors.purple,
-              Icons.credit_card,
-              institutionName: 'Interbank',
-            ),
-            const SizedBox(height: 24),
-            
-            // Sección de inversiones
-            const Text(
-              'Mis Inversiones',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              const SizedBox(height: 16),
+              
+              // Lista de cuentas (ejemplo con datos mock)
+              _buildAccountItem(
+                context,
+                'Efectivo',
+                1250.50,
+                'S/.',
+                AccountType.cash,
+                Colors.green,
+                Icons.account_balance_wallet,
               ),
-            ),
-            const SizedBox(height: 16),
-            
-            // Lista de inversiones (ejemplo con datos mock)
-            _buildAccountItem(
-              context,
-              'Fondo Mutuo',
-              5000.00,
-              'S/.',
-              AccountType.investment,
-              Colors.amber,
-              Icons.trending_up,
-              institutionName: 'Credicorp Capital',
-            ),
-          ],
+              const SizedBox(height: 12),
+              _buildAccountItem(
+                context,
+                'Cuenta BCP',
+                3780.25,
+                'S/.',
+                AccountType.checking,
+                Colors.red,
+                Icons.account_balance,
+                institutionName: 'Banco de Crédito del Perú',
+              ),
+              const SizedBox(height: 12),
+              _buildAccountItem(
+                context,
+                'Ahorros BBVA',
+                2500.00,
+                'S/.',
+                AccountType.savings,
+                Colors.blue,
+                Icons.savings,
+                institutionName: 'BBVA',
+              ),
+              const SizedBox(height: 12),
+              _buildAccountItem(
+                context,
+                'Tarjeta Visa',
+                -1200.80,
+                'S/.',
+                AccountType.creditCard,
+                Colors.purple,
+                Icons.credit_card,
+                institutionName: 'Interbank',
+              ),
+              const SizedBox(height: 24),
+              
+              // Sección de inversiones
+              const Text(
+                'Mis Inversiones',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              
+              // Lista de inversiones (ejemplo con datos mock)
+              _buildAccountItem(
+                context,
+                'Fondo Mutuo',
+                5000.00,
+                'S/.',
+                AccountType.investment,
+                Colors.amber,
+                Icons.trending_up,
+                institutionName: 'Credicorp Capital',
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navegar a la pantalla de añadir cuenta
-        },
+        onPressed: _addNewAccount,
+        tooltip: 'Añadir cuenta',
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void _addNewAccount() {
+    // Implementación futura para añadir cuentas
+    debugPrint('Añadir nueva cuenta');
   }
 
   Widget _buildAccountSummary(BuildContext context) {
@@ -232,9 +242,7 @@ class AccountsScreen extends StatelessWidget {
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
-          onTap: () {
-            // Navegar al detalle de la cuenta
-          },
+          onTap: () => _viewAccountDetails(name),
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -311,22 +319,24 @@ class AccountsScreen extends StatelessWidget {
     );
   }
 
+  void _viewAccountDetails(String accountName) {
+    // Implementación futura para ver detalles de cuenta
+    debugPrint('Ver detalles de la cuenta: $accountName');
+  }
+
   String _getAccountTypeLabel(AccountType type) {
-    switch (type) {
-      case AccountType.cash:
-        return 'Efectivo';
-      case AccountType.bankAccount:
-        return 'Cuenta Bancaria';
-      case AccountType.savingsAccount:
-        return 'Cuenta de Ahorros';
-      case AccountType.creditCard:
-        return 'Tarjeta de Crédito';
-      case AccountType.investment:
-        return 'Inversión';
-      case AccountType.loan:
-        return 'Préstamo';
-      case AccountType.other:
-        return 'Otro';
-    }
+    // Esta es la mejor práctica para switch con enums en Dart modernos:
+    // Usar switch expression garantiza exhaustividad en tiempo de compilación
+    return switch (type) {
+      AccountType.cash => 'Efectivo',
+      AccountType.checking => 'Cuenta Bancaria',
+      AccountType.savings => 'Cuenta de Ahorros',
+      AccountType.creditCard => 'Tarjeta de Crédito',
+      AccountType.investment => 'Inversión',
+      AccountType.loan => 'Préstamo',
+      AccountType.asset => 'Activo',
+      AccountType.debt => 'Deuda',
+      AccountType.other => 'Otro'
+    };
   }
 } 
