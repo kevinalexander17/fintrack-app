@@ -14,11 +14,11 @@ class AccountProvider extends ChangeNotifier {
   String get errorMessage => _errorMessage;
   
   // Cargar cuentas de un usuario
-  Future<void> loadAccounts(String userId) async {
+  void loadAccounts() {
     _setLoading(true);
     
     try {
-      _accountService.getAccounts(userId).listen((accounts) {
+      _accountService.getAccounts().listen((accounts) {
         _accounts = accounts;
         _setLoading(false);
         notifyListeners();
@@ -35,7 +35,7 @@ class AccountProvider extends ChangeNotifier {
     _setLoading(true);
     
     try {
-      final docId = await _accountService.addAccount(account);
+      final docId = await _accountService.createAccount(account);
       _setLoading(false);
       return docId;
     } catch (e) {

@@ -6,7 +6,7 @@ import 'package:fintrack/screens/home/home_screen.dart';
 import 'package:fintrack/constants/app_theme.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: AppTheme.primaryColor,
       body: Center(
         child: Column(
@@ -56,10 +56,10 @@ class _SplashScreenState extends State<SplashScreen> {
               color: Colors.white,
             ),
             
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             
             // Nombre de la aplicación
-            const Text(
+            Text(
               'FinTrack',
               style: TextStyle(
                 fontSize: 48,
@@ -68,10 +68,10 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             
             // Eslogan
-            const Text(
+            Text(
               'Gestión financiera personal para Perú',
               style: TextStyle(
                 fontSize: 16,
@@ -79,10 +79,10 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             
-            const SizedBox(height: 48),
+            SizedBox(height: 48),
             
             // Indicador de carga
-            const CircularProgressIndicator(
+            CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),
           ],

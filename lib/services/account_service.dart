@@ -63,10 +63,6 @@ class AccountService {
       throw Exception('El usuario no está autenticado');
     }
 
-    if (account.id == null) {
-      throw Exception('La cuenta no tiene un ID válido');
-    }
-
     // Verificar que la cuenta pertenece al usuario actual
     final doc = await _accountsCollection.doc(account.id).get();
     if (!doc.exists) {
@@ -114,7 +110,7 @@ class AccountService {
     
     double total = 0.0;
     for (var doc in snapshot.docs) {
-      final account = Account.fromMap(doc.data(), doc.id);
+      final account = Account.fromMap({...doc.data(), 'id': doc.id});
       total += account.balance;
     }
     
@@ -132,7 +128,7 @@ class AccountService {
     
     double total = 0.0;
     for (var doc in snapshot.docs) {
-      final account = Account.fromMap(doc.data(), doc.id);
+      final account = Account.fromMap({...doc.data(), 'id': doc.id});
       total += account.balance;
     }
     
@@ -150,7 +146,7 @@ class AccountService {
     
     double total = 0.0;
     for (var doc in snapshot.docs) {
-      final account = Account.fromMap(doc.data(), doc.id);
+      final account = Account.fromMap({...doc.data(), 'id': doc.id});
       total += account.balance;
     }
     

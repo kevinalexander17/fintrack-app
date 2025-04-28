@@ -15,7 +15,7 @@ class CustomButton extends StatelessWidget {
   final Widget? customIcon;
   
   const CustomButton({
-    Key? key,
+    super.key,
     required this.text,
     this.onPressed,
     this.isLoading = false,
@@ -27,7 +27,7 @@ class CustomButton extends StatelessWidget {
     this.borderRadius = 8.0,
     this.icon,
     this.customIcon,
-  }) : super(key: key);
+  });
   
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class CustomButton extends StatelessWidget {
             SizedBox(width: icon != null || customIcon != null ? 8 : 0),
             Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -95,7 +95,7 @@ class CustomButton extends StatelessWidget {
         // Solo texto
         buttonContent = Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),

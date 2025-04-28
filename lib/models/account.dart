@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 // Enumeración para los tipos de cuenta
 enum AccountType {
@@ -126,7 +125,7 @@ class Account {
   // Método para crear una cuenta desde un mapa de Firestore
   factory Account.fromMap(Map<String, dynamic> map) {
     // Función auxiliar para determinar el tipo de cuenta
-    AccountType _getAccountType(String type) {
+    AccountType getAccountType(String type) {
       switch (type) {
         case 'checking':
           return AccountType.checking;
@@ -155,7 +154,7 @@ class Account {
       id: map['id'] ?? '',
       userId: map['userId'] ?? '',
       name: map['name'] ?? '',
-      type: _getAccountType(map['type'] ?? 'other'),
+      type: getAccountType(map['type'] ?? 'other'),
       balance: (map['balance'] ?? 0.0).toDouble(),
       creditLimit: map['creditLimit']?.toDouble(),
       institutionName: map['institutionName'],

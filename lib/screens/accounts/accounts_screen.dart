@@ -138,18 +138,18 @@ class AccountsScreen extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Balance Total',
             style: TextStyle(
               fontSize: 16,
               color: Colors.white70,
             ),
           ),
-          const SizedBox(height: 8),
-          const Text(
+          SizedBox(height: 8),
+          Text(
             'S/. 11,330.00',
             style: TextStyle(
               fontSize: 28,
@@ -157,14 +157,14 @@ class AccountsScreen extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Activos
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
                     'Activos',
                     style: TextStyle(
@@ -187,7 +187,7 @@ class AccountsScreen extends StatelessWidget {
               // Pasivos
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: const [
+                children: [
                   Text(
                     'Pasivos',
                     style: TextStyle(

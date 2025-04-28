@@ -8,26 +8,26 @@ class TransactionService {
   CollectionReference get _transactionsRef => _firestore.collection('transactions');
   
   // Obtener transacciones de un usuario
-  Stream<List<Transaction>> getTransactions(String userId) {
+  Stream<List<FinTransaction>> getTransactions(String userId) {
     return _transactionsRef
         .where('userId', isEqualTo: userId)
         .orderBy('date', descending: true)
         .snapshots()
         .map((snapshot) {
           return snapshot.docs
-              .map((doc) => Transaction.fromMap(doc.data() as Map<String, dynamic>))
+              .map((doc) => FinTransaction.fromMap(doc.data() as Map<String, dynamic>))
               .toList();
         });
   }
   
   // Añadir una nueva transacción
-  Future<String> addTransaction(Transaction transaction) async {
+  Future<String> addTransaction(FinTransaction transaction) async {
     final docRef = await _transactionsRef.add(transaction.toMap());
     return docRef.id;
   }
   
   // Actualizar una transacción existente
-  Future<void> updateTransaction(Transaction transaction) async {
+  Future<void> updateTransaction(FinTransaction transaction) async {
     await _transactionsRef.doc(transaction.id).update(transaction.toMap());
   }
   
@@ -37,7 +37,7 @@ class TransactionService {
   }
   
   // Obtener transacciones por período
-  Stream<List<Transaction>> getTransactionsByPeriod(
+  Stream<List<FinTransaction>> getTransactionsByPeriod(
       String userId, DateTime startDate, DateTime endDate) {
     return _transactionsRef
         .where('userId', isEqualTo: userId)
@@ -47,13 +47,13 @@ class TransactionService {
         .snapshots()
         .map((snapshot) {
           return snapshot.docs
-              .map((doc) => Transaction.fromMap(doc.data() as Map<String, dynamic>))
+              .map((doc) => FinTransaction.fromMap(doc.data() as Map<String, dynamic>))
               .toList();
         });
   }
   
   // Obtener transacciones por categoría
-  Stream<List<Transaction>> getTransactionsByCategory(
+  Stream<List<FinTransaction>> getTransactionsByCategory(
       String userId, String categoryId) {
     return _transactionsRef
         .where('userId', isEqualTo: userId)
@@ -62,7 +62,7 @@ class TransactionService {
         .snapshots()
         .map((snapshot) {
           return snapshot.docs
-              .map((doc) => Transaction.fromMap(doc.data() as Map<String, dynamic>))
+              .map((doc) => FinTransaction.fromMap(doc.data() as Map<String, dynamic>))
               .toList();
         });
   }

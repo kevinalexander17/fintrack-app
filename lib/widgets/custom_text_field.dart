@@ -27,7 +27,7 @@ class CustomTextField extends StatelessWidget {
   final FocusNode? focusNode;
   
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.controller,
     this.label,
     this.hintText,
@@ -50,7 +50,7 @@ class CustomTextField extends StatelessWidget {
     this.isDense = false,
     this.validator,
     this.focusNode,
-  }) : super(key: key);
+  });
   
   @override
   Widget build(BuildContext context) {
@@ -80,23 +80,23 @@ class CustomTextField extends StatelessWidget {
         isDense: isDense,
         filled: true,
         fillColor: enabled ? Colors.white : Colors.grey[100],
-        contentPadding: EdgeInsets.symmetric(
+        contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
         ),
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           color: AppTheme.textSecondary,
           fontSize: 16,
         ),
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: AppTheme.textHint,
           fontSize: 15,
         ),
-        errorStyle: TextStyle(
+        errorStyle: const TextStyle(
           color: AppTheme.error,
           fontSize: 12,
         ),
-        helperStyle: TextStyle(
+        helperStyle: const TextStyle(
           color: AppTheme.textSecondary,
           fontSize: 12,
         ),
@@ -116,21 +116,21 @@ class CustomTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: AppTheme.primary,
             width: 1.5,
           ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: AppTheme.error,
             width: 1,
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: AppTheme.error,
             width: 1.5,
           ),

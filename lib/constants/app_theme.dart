@@ -78,7 +78,7 @@ class AppTheme {
   // Tema claro
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.light(
+    colorScheme: const ColorScheme.light(
       primary: primaryColor,
       secondary: secondaryColor,
       tertiary: accentColor,
@@ -135,12 +135,12 @@ class AppTheme {
   // Tema oscuro
   static final ThemeData darkTheme = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.dark(
+    colorScheme: const ColorScheme.dark(
       primary: primaryColor,
       secondary: secondaryColor,
       tertiary: accentColor,
-      background: const Color(0xFF121212),
-      surface: const Color(0xFF1E1E1E),
+      background: Color(0xFF121212),
+      surface: Color(0xFF1E1E1E),
       onBackground: Colors.white,
       onSurface: Colors.white,
       error: error,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fintrack/constants/app_theme.dart';
 import 'package:fintrack/constants/expense_categories.dart';
 
 class ExpenseSummary extends StatelessWidget {
@@ -77,7 +76,7 @@ class ExpenseSummary extends StatelessWidget {
       MapEntry(expenseCategories[1].name, 450.0), // Transporte
       MapEntry(expenseCategories[2].name, 650.0), // Salud
       MapEntry(expenseCategories[4].name, 550.0), // Servicios
-      MapEntry('Otros', 350.0),
+      const MapEntry('Otros', 350.0),
     ];
 
     return expenseData.asMap().entries.map((entry) {
@@ -117,7 +116,7 @@ class ExpenseSummary extends StatelessWidget {
       MapEntry(expenseCategories[1].name, 450.0), // Transporte
       MapEntry(expenseCategories[2].name, 650.0), // Salud
       MapEntry(expenseCategories[4].name, 550.0), // Servicios
-      MapEntry('Otros', 350.0),
+      const MapEntry('Otros', 350.0),
     ];
 
     return Column(

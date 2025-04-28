@@ -20,7 +20,7 @@ class ExpenseCategory {
 // Categorías de gastos comunes en Perú
 final List<ExpenseCategory> expenseCategories = [
   // Alimentación
-  ExpenseCategory(
+  const ExpenseCategory(
     id: 'food',
     name: 'Alimentación',
     icon: Icons.restaurant,
@@ -35,7 +35,7 @@ final List<ExpenseCategory> expenseCategories = [
   ),
   
   // Transporte
-  ExpenseCategory(
+  const ExpenseCategory(
     id: 'transport',
     name: 'Transporte',
     icon: Icons.directions_bus,
@@ -52,7 +52,7 @@ final List<ExpenseCategory> expenseCategories = [
   ),
   
   // Salud
-  ExpenseCategory(
+  const ExpenseCategory(
     id: 'health',
     name: 'Salud',
     icon: Icons.health_and_safety,
@@ -67,7 +67,7 @@ final List<ExpenseCategory> expenseCategories = [
   ),
   
   // Educación
-  ExpenseCategory(
+  const ExpenseCategory(
     id: 'education',
     name: 'Educación',
     icon: Icons.school,
@@ -82,7 +82,7 @@ final List<ExpenseCategory> expenseCategories = [
   ),
   
   // Servicios Públicos
-  ExpenseCategory(
+  const ExpenseCategory(
     id: 'utilities',
     name: 'Servicios',
     icon: Icons.wb_incandescent,
@@ -98,7 +98,7 @@ final List<ExpenseCategory> expenseCategories = [
   ),
   
   // Vivienda
-  ExpenseCategory(
+  const ExpenseCategory(
     id: 'housing',
     name: 'Vivienda',
     icon: Icons.home,
@@ -113,7 +113,7 @@ final List<ExpenseCategory> expenseCategories = [
   ),
   
   // Entretenimiento
-  ExpenseCategory(
+  const ExpenseCategory(
     id: 'entertainment',
     name: 'Entretenimiento',
     icon: Icons.movie,
@@ -128,7 +128,7 @@ final List<ExpenseCategory> expenseCategories = [
   ),
   
   // Compras
-  ExpenseCategory(
+  const ExpenseCategory(
     id: 'shopping',
     name: 'Compras',
     icon: Icons.shopping_bag,
@@ -143,7 +143,7 @@ final List<ExpenseCategory> expenseCategories = [
   ),
   
   // Otros
-  ExpenseCategory(
+  const ExpenseCategory(
     id: 'others',
     name: 'Otros',
     icon: Icons.more_horiz,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack/models/transaction.dart';
 import 'package:fintrack/models/category.dart';
 import 'package:fintrack/services/transaction_service.dart';
@@ -8,16 +7,16 @@ import 'package:fintrack/providers/category_provider.dart';
 class TransactionProvider extends ChangeNotifier {
   final TransactionService _transactionService = TransactionService();
   final CategoryProvider _categoryProvider;
-  List<Transaction> _transactions = [];
-  List<Transaction> _filteredTransactions = [];
+  List<FinTransaction> _transactions = [];
+  List<FinTransaction> _filteredTransactions = [];
   bool _isLoading = false;
   String _errorMessage = '';
   
   TransactionProvider(this._categoryProvider);
   
   // Getters
-  List<Transaction> get transactions => _transactions;
-  List<Transaction> get filteredTransactions => _filteredTransactions;
+  List<FinTransaction> get transactions => _transactions;
+  List<FinTransaction> get filteredTransactions => _filteredTransactions;
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
   
@@ -75,7 +74,7 @@ class TransactionProvider extends ChangeNotifier {
   }
   
   // Añadir una nueva transacción
-  Future<void> addTransaction(Transaction transaction) async {
+  Future<void> addTransaction(FinTransaction transaction) async {
     _setLoading(true);
     
     try {
@@ -87,7 +86,7 @@ class TransactionProvider extends ChangeNotifier {
   }
   
   // Actualizar una transacción existente
-  Future<void> updateTransaction(Transaction transaction) async {
+  Future<void> updateTransaction(FinTransaction transaction) async {
     _setLoading(true);
     
     try {
@@ -131,13 +130,13 @@ class TransactionProvider extends ChangeNotifier {
   }
   
   // Obtener categoría de una transacción
-  Category? getCategoryForTransaction(Transaction transaction) {
+  Category? getCategoryForTransaction(FinTransaction transaction) {
     if (transaction.categoryId == null) return null;
     return _categoryProvider.getCategoryById(transaction.categoryId!);
   }
   
   // Obtener nombre de categoría para una transacción
-  String getCategoryNameForTransaction(Transaction transaction) {
+  String getCategoryNameForTransaction(FinTransaction transaction) {
     if (transaction.categoryId == null) {
       return transaction.type == TransactionType.income ? 'Ingreso' : 'Sin categoría';
     }
@@ -153,7 +152,7 @@ class TransactionProvider extends ChangeNotifier {
             transaction.type == TransactionType.income &&
             transaction.date.isAfter(startDate) && 
             transaction.date.isBefore(endDate.add(const Duration(days: 1))))
-        .fold(0, (sum, transaction) => sum + transaction.amount);
+        .fold(0, (double sum, transaction) => sum + transaction.amount);
   }
   
   // Calcular total de gastos en un período
@@ -163,7 +162,7 @@ class TransactionProvider extends ChangeNotifier {
             transaction.type == TransactionType.expense &&
             transaction.date.isAfter(startDate) && 
             transaction.date.isBefore(endDate.add(const Duration(days: 1))))
-        .fold(0, (sum, transaction) => sum + transaction.amount);
+        .fold(0, (double sum, transaction) => sum + transaction.amount);
   }
   
   // Calcular gastos por categoría

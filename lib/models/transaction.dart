@@ -12,7 +12,7 @@ enum TransactionStatus {
   pending,
   cleared,
   reconciled,
-  void
+  voided
 }
 
 enum TransactionRecurrence {
@@ -25,8 +25,8 @@ enum TransactionRecurrence {
   yearly
 }
 
-// Clase para el modelo de transacción
-class Transaction {
+// Clase para el modelo de transacción (renombrada)
+class FinTransaction {
   final String id;
   final String userId;
   final String accountId;
@@ -57,7 +57,7 @@ class Transaction {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  Transaction({
+  FinTransaction({
     required this.id,
     required this.userId,
     required this.accountId,
@@ -90,7 +90,7 @@ class Transaction {
   });
 
   // Método para clonar una transacción con cambios
-  Transaction copyWith({
+  FinTransaction copyWith({
     String? id,
     String? userId,
     String? accountId,
@@ -121,7 +121,7 @@ class Transaction {
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
-    return Transaction(
+    return FinTransaction(
       id: id ?? this.id,
       userId: userId ?? this.userId,
       accountId: accountId ?? this.accountId,
@@ -190,9 +190,9 @@ class Transaction {
   }
 
   // Método para crear una transacción desde un mapa de Firestore
-  factory Transaction.fromMap(Map<String, dynamic> map) {
+  factory FinTransaction.fromMap(Map<String, dynamic> map) {
     // Función auxiliar para determinar el tipo de transacción
-    TransactionType _getTransactionType(String type) {
+    TransactionType getTransactionType(String type) {
       switch (type) {
         case 'expense':
           return TransactionType.expense;
@@ -206,7 +206,7 @@ class Transaction {
     }
 
     // Función auxiliar para determinar el estado de la transacción
-    TransactionStatus _getTransactionStatus(String status) {
+    TransactionStatus getTransactionStatus(String status) {
       switch (status) {
         case 'pending':
           return TransactionStatus.pending;
@@ -215,14 +215,15 @@ class Transaction {
         case 'reconciled':
           return TransactionStatus.reconciled;
         case 'void':
-          return TransactionStatus.void;
+        case 'voided':
+          return TransactionStatus.voided;
         default:
           return TransactionStatus.cleared;
       }
     }
 
     // Convertir lista de etiquetas
-    List<String>? _getTags(dynamic tags) {
+    List<String>? getTags(dynamic tags) {
       if (tags == null) return null;
       if (tags is List) {
         return tags.map<String>((tag) => tag.toString()).toList();
@@ -230,20 +231,20 @@ class Transaction {
       return null;
     }
 
-    return Transaction(
+    return FinTransaction(
       id: map['id'] ?? '',
       userId: map['userId'] ?? '',
       accountId: map['accountId'] ?? '',
       toAccountId: map['toAccountId'],
-      type: _getTransactionType(map['type'] ?? 'expense'),
-      status: _getTransactionStatus(map['status'] ?? 'cleared'),
+      type: getTransactionType(map['type'] ?? 'expense'),
+      status: getTransactionStatus(map['status'] ?? 'cleared'),
       amount: (map['amount'] ?? 0.0).toDouble(),
       categoryId: map['categoryId'],
       subcategoryId: map['subcategoryId'],
       date: (map['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
       description: map['description'],
       notes: map['notes'],
-      tags: _getTags(map['tags']),
+      tags: getTags(map['tags']),
       receiptUrl: map['receiptUrl'],
       isRecurring: map['isRecurring'] ?? false,
       recurringDetails: map['recurringDetails'],
@@ -251,9 +252,7 @@ class Transaction {
       isPending: map['isPending'] ?? false,
       isExcludedFromStats: map['isExcludedFromStats'] ?? false,
       currencyCode: map['currencyCode'],
-      originalAmount: map['originalAmount'] != null 
-          ? (map['originalAmount']).toDouble() 
-          : null,
+      originalAmount: map['originalAmount'] != null ? (map['originalAmount'] as num).toDouble() : null,
       originalCurrency: map['originalCurrency'],
       payee: map['payee'],
       location: map['location'],
