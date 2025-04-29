@@ -12,15 +12,16 @@ class AuthProvider with ChangeNotifier {
   String? _error;
   
   User? get user => _user;
+  User? get currentUser => _user;
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get isAuthenticated => _user != null;
   
   // Estado de autenticación
-  Stream<User?> get authStateChanges => _authService.authStateChanges();
+  Stream<User?> get authStateChanges => _authService.authStateChanges;
   
   AuthProvider() {
-    _authService.authStateChanges().listen((user) {
+    _authService.authStateChanges.listen((user) {
       _user = user;
       notifyListeners();
     });

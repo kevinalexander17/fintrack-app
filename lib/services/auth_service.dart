@@ -37,16 +37,13 @@ class AuthService {
   }
 
   // Registro con email y contraseña
-  Future<UserCredential> signUpWithEmail(
-      String email, String password, String name) async {
+  Future<User?> signUpWithEmail(String email, String password, String name) async {
     try {
-      // Crear usuario en Firebase Auth
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
       
-      // Crear documento de usuario en Firestore
       if (userCredential.user != null) {
         await _firestore.collection('users').doc(userCredential.user!.uid).set({
           'uid': userCredential.user!.uid,
@@ -58,33 +55,26 @@ class AuthService {
           'authProvider': 'email',
         });
         
-        // Actualizar el displayName del usuario
         await userCredential.user!.updateDisplayName(name);
       }
       
-      return userCredential;
-    } on FirebaseAuthException catch (e) {
-      debugPrint('Error en signUpWithEmail: ${e.code} - ${e.message}');
-      rethrow;
+      return userCredential.user;
     } catch (e) {
-      debugPrint('Error inesperado en signUpWithEmail: $e');
+      debugPrint('Error en signUpWithEmail: $e');
       rethrow;
     }
   }
 
   // Inicio de sesión con email y contraseña
-  Future<UserCredential> signInWithEmail(String email, String password) async {
+  Future<User?> signInWithEmail(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
       
-      // Actualizar última conexión
       if (userCredential.user != null) {
         final uid = userCredential.user!.uid;
-        
-        // Verificar si el usuario existe en Firestore
         bool exists = await userExistsInFirestore(uid);
         
         if (exists) {
@@ -92,7 +82,6 @@ class AuthService {
             'lastLogin': FieldValue.serverTimestamp(),
           });
         } else {
-          // Si el usuario no existe en Firestore, crearlo
           await _firestore.collection('users').doc(uid).set({
             'uid': uid,
             'email': email,
@@ -105,78 +94,65 @@ class AuthService {
         }
       }
       
-      return userCredential;
-    } on FirebaseAuthException catch (e) {
-      debugPrint('Error en signInWithEmail: ${e.code} - ${e.message}');
-      rethrow;
+      return userCredential.user;
     } catch (e) {
-      debugPrint('Error inesperado en signInWithEmail: $e');
+      debugPrint('Error en signInWithEmail: $e');
       rethrow;
     }
   }
 
   // Inicio de sesión con Google
-  Future<UserCredential> signInWithGoogle() async {
+  Future<User?> signInWithGoogle() async {
     try {
+      late final UserCredential userCredential;
+      
       if (kIsWeb) {
-        // Autenticación para Web
         GoogleAuthProvider googleProvider = GoogleAuthProvider();
         googleProvider.addScope('email');
         googleProvider.addScope('profile');
         
-        return await _auth.signInWithPopup(googleProvider);
+        userCredential = await _auth.signInWithPopup(googleProvider);
       } else {
-        // Autenticación para mobile
         final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
         
         if (googleUser == null) {
           throw Exception('Inicio de sesión con Google cancelado por el usuario');
         }
         
-        // Obtener detalles de autenticación de la solicitud
         final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-        
-        // Crear una credencial para Firebase
-        final OAuthCredential credential = GoogleAuthProvider.credential(
+        final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
         
-        // Iniciar sesión en Firebase con la credencial
-        UserCredential userCredential = await _auth.signInWithCredential(credential);
-        
-        // Verificar si es un usuario nuevo o existente
-        if (userCredential.user != null) {
-          final uid = userCredential.user!.uid;
-          final bool exists = await userExistsInFirestore(uid);
-          
-          if (!exists) {
-            // Crear documento de usuario en Firestore
-            await _firestore.collection('users').doc(uid).set({
-              'uid': uid,
-              'email': userCredential.user!.email,
-              'name': userCredential.user!.displayName,
-              'photoUrl': userCredential.user!.photoURL,
-              'createdAt': FieldValue.serverTimestamp(),
-              'lastLogin': FieldValue.serverTimestamp(),
-              'authProvider': 'google',
-            });
-          } else {
-            // Actualizar última conexión
-            await _firestore.collection('users').doc(uid).update({
-              'lastLogin': FieldValue.serverTimestamp(),
-              'photoUrl': userCredential.user!.photoURL, // Actualizar foto por si cambió
-            });
-          }
-        }
-        
-        return userCredential;
+        userCredential = await _auth.signInWithCredential(credential);
       }
-    } on FirebaseAuthException catch (e) {
-      debugPrint('Error de Firebase en signInWithGoogle: ${e.code} - ${e.message}');
-      rethrow;
+      
+      if (userCredential.user != null) {
+        final uid = userCredential.user!.uid;
+        final bool exists = await userExistsInFirestore(uid);
+        
+        if (!exists) {
+          await _firestore.collection('users').doc(uid).set({
+            'uid': uid,
+            'email': userCredential.user!.email,
+            'name': userCredential.user!.displayName,
+            'photoUrl': userCredential.user!.photoURL,
+            'createdAt': FieldValue.serverTimestamp(),
+            'lastLogin': FieldValue.serverTimestamp(),
+            'authProvider': 'google',
+          });
+        } else {
+          await _firestore.collection('users').doc(uid).update({
+            'lastLogin': FieldValue.serverTimestamp(),
+            'photoUrl': userCredential.user!.photoURL,
+          });
+        }
+      }
+      
+      return userCredential.user;
     } catch (e) {
-      debugPrint('Error inesperado en signInWithGoogle: $e');
+      debugPrint('Error en signInWithGoogle: $e');
       rethrow;
     }
   }
